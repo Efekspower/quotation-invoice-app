@@ -1,14 +1,6 @@
-/* =========================================
-   EFEXPOWER 1
-   QUOTATION & INVOICE APP
-   ========================================= */
+/* EFEXPOWER QUOTATION & INVOICE APP */
 
 let quotationItems = [];
-
-
-/* =========================================
-   BASIC HELPERS
-   ========================================= */
 
 function showMessage(message) {
     alert(message);
@@ -22,8 +14,7 @@ function formatMoney(value) {
 }
 
 function todayDate() {
-    const date = new Date();
-    return date.toISOString().split("T")[0];
+    return new Date().toISOString().split("T")[0];
 }
 
 function addDays(dateString, days) {
@@ -32,28 +23,16 @@ function addDays(dateString, days) {
     return date.toISOString().split("T")[0];
 }
 
-
-/* =========================================
-   DOCUMENT NUMBER
-   ========================================= */
-
 function getNextQuotationNumber() {
-
-    const quotations =
-        JSON.parse(localStorage.getItem("quotations") || "[]");
-
-    const number = quotations.length + 1;
+    const quotations = JSON.parse(
+        localStorage.getItem("quotations") || "[]"
+    );
 
     return "QT-" +
         new Date().getFullYear() +
         "-" +
-        String(number).padStart(4, "0");
+        String(quotations.length + 1).padStart(4, "0");
 }
-
-
-/* =========================================
-   NAVIGATION
-   ========================================= */
 
 function goHome() {
     location.reload();
@@ -64,7 +43,7 @@ function newQuotation() {
 }
 
 function newInvoice() {
-    showMessage("Invoice module will be added after the quotation module.");
+    showMessage("Invoice module will be added next.");
 }
 
 function openCustomers() {
@@ -79,16 +58,16 @@ function openSettings() {
     showMessage("Company settings will be added next.");
 }
 
-
-/* =========================================
-   QUOTATION FORM
-   ========================================= */
-
 function showQuotationForm() {
 
     quotationItems = [];
 
     const app = document.querySelector("main.container");
+
+    if (!app) {
+        alert("Application container was not found.");
+        return;
+    }
 
     app.innerHTML = `
         <div class="page-header">
@@ -100,11 +79,7 @@ function showQuotationForm() {
             </div>
         </div>
 
-
-        <!-- DOCUMENT INFORMATION -->
-
         <section class="form-section">
-
             <h3>Document Information</h3>
 
             <div class="form-grid">
@@ -125,7 +100,6 @@ function showQuotationForm() {
                         type="date"
                         id="quotationDate"
                         value="${todayDate()}"
-                        onchange="updateValidityDate()"
                     >
                 </div>
 
@@ -148,37 +122,19 @@ function showQuotationForm() {
                 </div>
 
             </div>
-
         </section>
-
-
-        <!-- CUSTOMER -->
 
         <section class="form-section">
 
-            <div class="form-section-title">
-
-                <h3>Customer</h3>
-
-                <button
-                    class="small-button"
-                    onclick="addCustomer()"
-                >
-                    + Add Customer
-                </button>
-
-            </div>
+            <h3>Customer</h3>
 
             <div class="form-group">
-
                 <label>Customer Name / Company</label>
-
                 <input
                     type="text"
                     id="customerName"
                     placeholder="Enter customer name"
                 >
-
             </div>
 
             <div class="form-grid">
@@ -220,16 +176,11 @@ function showQuotationForm() {
                 </div>
 
             </div>
-
         </section>
-
-
-        <!-- ITEMS -->
 
         <section class="form-section">
 
             <div class="form-section-title">
-
                 <h3>Items</h3>
 
                 <button
@@ -238,34 +189,18 @@ function showQuotationForm() {
                 >
                     + Add Item
                 </button>
-
             </div>
-
 
             <div id="quotationItems"></div>
 
-
             <div class="empty-items" id="emptyItems">
-
                 <div>🧾</div>
-
                 <p>No items added yet.</p>
-
-                <button
-                    class="primary-button"
-                    onclick="addQuotationItem()"
-                >
-                    + Add First Item
-                </button>
-
             </div>
 
         </section>
 
-
-        <!-- TOTALS -->
-
-        <section class="form-section totals-section">
+        <section class="form-section">
 
             <h3>Summary</h3>
 
@@ -275,11 +210,9 @@ function showQuotationForm() {
             </div>
 
             <div class="total-row">
-
                 <span>Discount</span>
 
                 <div class="total-input">
-
                     <input
                         type="number"
                         id="discount"
@@ -288,20 +221,14 @@ function showQuotationForm() {
                         step="0.01"
                         oninput="calculateQuotation()"
                     >
-
                     <span>RM</span>
-
                 </div>
-
             </div>
 
-
             <div class="total-row">
-
                 <span>SST</span>
 
                 <div class="total-input">
-
                     <input
                         type="number"
                         id="sstRate"
@@ -310,62 +237,42 @@ function showQuotationForm() {
                         step="0.01"
                         oninput="calculateQuotation()"
                     >
-
                     <span>%</span>
-
                 </div>
-
             </div>
 
-
             <div class="grand-total">
-
                 <span>Total</span>
-
-                <strong id="grandTotal">
-                    RM 0.00
-                </strong>
-
+                <strong id="grandTotal">RM 0.00</strong>
             </div>
 
         </section>
-
-
-        <!-- NOTES -->
 
         <section class="form-section">
 
             <h3>Notes & Terms</h3>
 
             <div class="form-group">
-
                 <label>Notes</label>
 
                 <textarea
                     id="quotationNotes"
                     rows="4"
-                    placeholder="Additional notes for the customer"
+                    placeholder="Additional notes"
                 ></textarea>
-
             </div>
 
             <div class="form-group">
-
                 <label>Terms & Conditions</label>
 
                 <textarea
                     id="quotationTerms"
                     rows="5"
-                    placeholder="Payment terms, delivery terms, validity, etc."
                 >Payment is due according to the agreed payment terms.
 Quotation validity is as stated above.</textarea>
-
             </div>
 
         </section>
-
-
-        <!-- ACTIONS -->
 
         <section class="form-actions">
 
@@ -384,39 +291,15 @@ Quotation validity is as stated above.</textarea>
             </button>
 
         </section>
-
     `;
 
     addQuotationItem();
 }
 
-
-/* =========================================
-   CUSTOMER
-   ========================================= */
-
-function addCustomer() {
-
-    const name = prompt("Enter customer name:");
-
-    if (!name) {
-        return;
-    }
-
-    document.getElementById("customerName").value = name;
-}
-
-
-/* =========================================
-   QUOTATION ITEMS
-   ========================================= */
-
 function addQuotationItem() {
 
-    const id = Date.now();
-
     quotationItems.push({
-        id: id,
+        id: Date.now(),
         description: "",
         quantity: 1,
         unit: "Unit",
@@ -426,17 +309,31 @@ function addQuotationItem() {
     renderQuotationItems();
 }
 
-
 function removeQuotationItem(id) {
 
-    quotationItems =
-        quotationItems.filter(item => item.id !== id);
+    quotationItems = quotationItems.filter(
+        item => item.id !== id
+    );
 
     renderQuotationItems();
-
-    calculateQuotation();
 }
 
+function updateItem(id, field, value) {
+
+    const item = quotationItems.find(
+        item => item.id === id
+    );
+
+    if (!item) return;
+
+    if (field === "quantity" || field === "price") {
+        item[field] = Number(value) || 0;
+    } else {
+        item[field] = value;
+    }
+
+    renderQuotationItems();
+}
 
 function renderQuotationItems() {
 
@@ -449,13 +346,13 @@ function renderQuotationItems() {
     if (!container) return;
 
     if (quotationItems.length === 0) {
-
         container.innerHTML = "";
 
         if (empty) {
             empty.style.display = "block";
         }
 
+        calculateQuotation();
         return;
     }
 
@@ -463,158 +360,128 @@ function renderQuotationItems() {
         empty.style.display = "none";
     }
 
+    container.innerHTML = quotationItems.map(
+        (item, index) => {
 
-    container.innerHTML = quotationItems.map((item, index) => {
+            const total =
+                Number(item.quantity || 0) *
+                Number(item.price || 0);
 
-        const total =
-            Number(item.quantity || 0) *
-            Number(item.price || 0);
+            return `
+                <div class="quotation-item">
 
-        return `
-            <div class="quotation-item">
+                    <div class="item-header">
 
-                <div class="item-header">
+                        <strong>
+                            Item ${index + 1}
+                        </strong>
 
-                    <strong>Item ${index + 1}</strong>
+                        <button
+                            class="delete-button"
+                            onclick="removeQuotationItem(${item.id})"
+                        >
+                            ×
+                        </button>
 
-                    <button
-                        class="delete-button"
-                        onclick="removeQuotationItem(${item.id})"
-                    >
-                        ×
-                    </button>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Description</label>
-
-                    <input
-                        type="text"
-                        value="${escapeHtml(item.description)}"
-                        placeholder="Product or service description"
-                        onchange="updateItem(${item.id}, 'description', this.value)"
-                    >
-
-                </div>
-
-
-                <div class="item-grid">
+                    </div>
 
                     <div class="form-group">
 
-                        <label>Quantity</label>
+                        <label>Description</label>
 
                         <input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value="${item.quantity}"
-                            onchange="updateItem(${item.id}, 'quantity', this.value)"
+                            type="text"
+                            placeholder="Product or service"
+                            value="${escapeHtml(item.description)}"
+                            onchange="updateItem(
+                                ${item.id},
+                                'description',
+                                this.value
+                            )"
                         >
 
                     </div>
 
+                    <div class="item-grid">
 
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <label>Unit</label>
+                            <label>Quantity</label>
 
-                        <select
-                            onchange="updateItem(${item.id}, 'unit', this.value)"
-                        >
+                            <input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="${item.quantity}"
+                                onchange="updateItem(
+                                    ${item.id},
+                                    'quantity',
+                                    this.value
+                                )"
+                            >
 
-                            <option ${item.unit === "Unit" ? "selected" : ""}>
-                                Unit
-                            </option>
+                        </div>
 
-                            <option ${item.unit === "Lot" ? "selected" : ""}>
-                                Lot
-                            </option>
+                        <div class="form-group">
 
-                            <option ${item.unit === "Hour" ? "selected" : ""}>
-                                Hour
-                            </option>
+                            <label>Unit</label>
 
-                            <option ${item.unit === "Day" ? "selected" : ""}>
-                                Day
-                            </option>
+                            <select
+                                onchange="updateItem(
+                                    ${item.id},
+                                    'unit',
+                                    this.value
+                                )"
+                            >
 
-                            <option ${item.unit === "Month" ? "selected" : ""}>
-                                Month
-                            </option>
+                                <option>Unit</option>
+                                <option>Lot</option>
+                                <option>Hour</option>
+                                <option>Day</option>
+                                <option>Month</option>
+                                <option>Job</option>
 
-                            <option ${item.unit === "Job" ? "selected" : ""}>
-                                Job
-                            </option>
+                            </select>
 
-                        </select>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Unit Price</label>
+
+                            <input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="${item.price}"
+                                onchange="updateItem(
+                                    ${item.id},
+                                    'price',
+                                    this.value
+                                )"
+                            >
+
+                        </div>
 
                     </div>
 
+                    <div class="item-total">
 
-                    <div class="form-group">
+                        <span>Item Total</span>
 
-                        <label>Unit Price</label>
-
-                        <input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value="${item.price}"
-                            onchange="updateItem(${item.id}, 'price', this.value)"
-                        >
+                        <strong>
+                            ${formatMoney(total)}
+                        </strong>
 
                     </div>
 
                 </div>
-
-
-                <div class="item-total">
-
-                    <span>Item Total</span>
-
-                    <strong>
-                        ${formatMoney(total)}
-                    </strong>
-
-                </div>
-
-            </div>
-        `;
-
-    }).join("");
+            `;
+        }
+    ).join("");
 
     calculateQuotation();
 }
-
-
-function updateItem(id, field, value) {
-
-    const item =
-        quotationItems.find(item => item.id === id);
-
-    if (!item) return;
-
-    if (field === "quantity" || field === "price") {
-
-        item[field] = Number(value) || 0;
-
-    } else {
-
-        item[field] = value;
-
-    }
-
-    renderQuotationItems();
-}
-
-
-/* =========================================
-   CALCULATIONS
-   ========================================= */
 
 function calculateQuotation() {
 
@@ -628,30 +495,24 @@ function calculateQuotation() {
 
     });
 
-
     const discount =
         Number(
             document.getElementById("discount")?.value || 0
         );
-
 
     const sstRate =
         Number(
             document.getElementById("sstRate")?.value || 0
         );
 
-
     const taxableAmount =
         Math.max(subtotal - discount, 0);
-
 
     const sst =
         taxableAmount * (sstRate / 100);
 
-
     const total =
         taxableAmount + sst;
-
 
     const subtotalElement =
         document.getElementById("subtotal");
@@ -659,18 +520,15 @@ function calculateQuotation() {
     const totalElement =
         document.getElementById("grandTotal");
 
-
     if (subtotalElement) {
         subtotalElement.textContent =
             formatMoney(subtotal);
     }
 
-
     if (totalElement) {
         totalElement.textContent =
             formatMoney(total);
     }
-
 
     return {
         subtotal,
@@ -682,153 +540,120 @@ function calculateQuotation() {
     };
 }
 
-
-/* =========================================
-   DATE
-   ========================================= */
-
-function updateValidityDate() {
-
-    const date =
-        document.getElementById("quotationDate")?.value;
-
-    if (!date) return;
-
-    document.getElementById("validUntil").value =
-        addDays(date, 14);
-}
-
-
-/* =========================================
-   SAVE QUOTATION
-   ========================================= */
-
 function saveQuotation() {
 
     const customerName =
-        document.getElementById("customerName")?.value.trim();
-
+        document.getElementById(
+            "customerName"
+        )?.value.trim();
 
     if (!customerName) {
-
         alert("Please enter the customer name.");
-
-        document.getElementById("customerName").focus();
-
         return;
     }
-
-
-    if (quotationItems.length === 0) {
-
-        alert("Please add at least one item.");
-
-        return;
-    }
-
 
     const hasEmptyDescription =
         quotationItems.some(
             item => !item.description.trim()
         );
 
-
     if (hasEmptyDescription) {
-
-        alert("Please enter a description for every item.");
-
+        alert(
+            "Please enter a description for every item."
+        );
         return;
     }
-
-
-    const totals =
-        calculateQuotation();
-
 
     const quotation = {
 
         id: Date.now(),
 
         quotationNumber:
-            document.getElementById("quotationNumber").value,
+            document.getElementById(
+                "quotationNumber"
+            ).value,
 
         date:
-            document.getElementById("quotationDate").value,
+            document.getElementById(
+                "quotationDate"
+            ).value,
 
         validUntil:
-            document.getElementById("validUntil").value,
+            document.getElementById(
+                "validUntil"
+            ).value,
 
         referenceNumber:
-            document.getElementById("referenceNumber").value,
+            document.getElementById(
+                "referenceNumber"
+            ).value,
 
         customer: {
 
-            name:
-                customerName,
+            name: customerName,
 
             contact:
-                document.getElementById("customerContact").value,
+                document.getElementById(
+                    "customerContact"
+                ).value,
 
             phone:
-                document.getElementById("customerPhone").value,
+                document.getElementById(
+                    "customerPhone"
+                ).value,
 
             email:
-                document.getElementById("customerEmail").value,
+                document.getElementById(
+                    "customerEmail"
+                ).value,
 
             address:
-                document.getElementById("customerAddress").value
-
+                document.getElementById(
+                    "customerAddress"
+                ).value
         },
 
-        items:
-            quotationItems,
+        items: quotationItems,
 
-        totals:
-            totals,
+        totals: calculateQuotation(),
 
         notes:
-            document.getElementById("quotationNotes").value,
+            document.getElementById(
+                "quotationNotes"
+            ).value,
 
         terms:
-            document.getElementById("quotationTerms").value,
+            document.getElementById(
+                "quotationTerms"
+            ).value,
 
-        status:
-            "Draft",
+        status: "Draft",
 
         createdAt:
             new Date().toISOString()
-
     };
-
 
     const quotations =
         JSON.parse(
-            localStorage.getItem("quotations") || "[]"
+            localStorage.getItem(
+                "quotations"
+            ) || "[]"
         );
 
-
     quotations.push(quotation);
-
 
     localStorage.setItem(
         "quotations",
         JSON.stringify(quotations)
     );
 
-
     alert(
         quotation.quotationNumber +
         " has been saved successfully."
     );
 
-
     goHome();
 }
-
-
-/* =========================================
-   SECURITY HELPER
-   ========================================= */
 
 function escapeHtml(value) {
 
@@ -840,18 +665,6 @@ function escapeHtml(value) {
         .replace(/'/g, "&#039;");
 }
 
-
-/* =========================================
-   INITIALIZATION
-   ========================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        console.log(
-            "Efekspower Quotation & Invoice App loaded."
-        );
-
-    }
+console.log(
+    "Efekspower quotation app loaded successfully."
 );
