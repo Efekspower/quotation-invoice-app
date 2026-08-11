@@ -1,1 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Quotation App">
 
+    <title>Quotation & Invoice App</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div>
+            <h1>Efekspower</h1>
+            <p>Quotation & Invoice</p>
+        </div>
+
+        <button class="profile-button" onclick="openSettings()">
+            ⚙️
+        </button>
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+
+        <!-- DASHBOARD -->
+        <section class="welcome-section">
+            <h2>Dashboard</h2>
+            <p>Manage your quotations and invoices.</p>
+        </section>
+
+
+        <!-- SUMMARY CARDS -->
+        <section class="summary-grid">
+
+            <div class="summary-card">
+                <span class="summary-title">Outstanding</span>
+                <strong>RM 0.00</strong>
+                <small>Unpaid invoices</small>
+            </div>
+
+            <div class="summary-card">
+                <span class="summary-title">Paid</span>
+                <strong>RM 0.00</strong>
+                <small>Paid invoices</small>
+            </div>
+
+            <div class="summary-card">
+                <span class="summary-title">Quotations</span>
+                <strong>0</strong>
+                <small>This month</small>
+            </div>
+
+            <div class="summary-card">
+                <span class="summary-title">Invoices</span>
+                <strong>0</strong>
+                <small>This month</small>
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+        <section class="section">
+
+            <h2>Quick Actions</h2>
+
+            <div class="action-grid">
+
+                <button class="action-card" onclick="newQuotation()">
+                    <div class="action-icon">🧾</div>
+                    <div>
+                        <strong>New Quotation</strong>
+                        <span>Create a quotation</span>
+                    </div>
+                </button>
+
+
+                <button class="action-card" onclick="newInvoice()">
+                    <div class="action-icon">📄</div>
+                    <div>
+                        <strong>New Invoice</strong>
+                        <span>Create an invoice</span>
+                    </div>
+                </button>
+
+
+                <button class="action-card" onclick="openCustomers()">
+                    <div class="action-icon">👥</div>
+                    <div>
+                        <strong>Customers</strong>
+                        <span>Manage customers</span>
+                    </div>
+                </button>
+
+
+                <button class="action-card" onclick="openDocuments()">
+                    <div class="action-icon">📋</div>
+                    <div>
+                        <strong>Documents</strong>
+                        <span>View quotations & invoices</span>
+                    </div>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT DOCUMENTS -->
+        <section class="section">
+
+            <div class="section-header">
+                <h2>Recent Documents</h2>
+
+                <button class="text-button" onclick="openDocuments()">
+                    View All
+                </button>
+            </div>
+
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📄
+                </div>
+
+                <h3>No documents yet</h3>
+
+                <p>
+                    Your quotations and invoices will appear here.
+                </p>
+
+                <button class="primary-button" onclick="newQuotation()">
+                    + Create Quotation
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- MOBILE NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <button class="nav-item active" onclick="goHome()">
+            <span>🏠</span>
+            <small>Home</small>
+        </button>
+
+        <button class="nav-item" onclick="newQuotation()">
+            <span>🧾</span>
+            <small>Quotation</small>
+        </button>
+
+        <button class="nav-item" onclick="newInvoice()">
+            <span>📄</span>
+            <small>Invoice</small>
+        </button>
+
+        <button class="nav-item" onclick="openCustomers()">
+            <span>👥</span>
+            <small>Customers</small>
+        </button>
+
+        <button class="nav-item" onclick="openSettings()">
+            <span>⚙️</span>
+            <small>Settings</small>
+        </button>
+
+    </nav>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="app.js"></script>
+
+</body>
+</html>
